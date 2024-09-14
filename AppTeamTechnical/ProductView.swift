@@ -90,13 +90,17 @@ struct ProductView: View {
     }
     
     func addToLikedItems(product: Product) {
-        if let index = likedItems.firstIndex(where: { $0.id == product.id }) {
-            likedItems.remove(at: index)
-        } else {
-            likedItems.append(product)
+        if let index = viewModel.products.firstIndex(where: { $0.id == product.id }) {
+            viewModel.products[index].isLiked.toggle()  // Toggle the isLiked property locally
+            
+            if viewModel.products[index].isLiked {
+                likedItems.append(viewModel.products[index])
+            } else {
+                likedItems.removeAll { $0.id == product.id }
+            }
         }
     }
-    
+        
     private func heartFill(isLiked: Bool) -> Image {
         if isLiked {
             return Image(systemName: "heart.fill")
