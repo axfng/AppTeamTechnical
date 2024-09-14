@@ -11,7 +11,7 @@ struct ItemView: View {
     let product: Product
     
     var body: some View {
-        Text(product.title)
+        Text("Hello, World!")
     }
     
 }

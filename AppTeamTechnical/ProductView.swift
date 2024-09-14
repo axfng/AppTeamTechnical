@@ -23,9 +23,13 @@ struct Product: Codable, Identifiable {
 }
 
 struct ProductView: View {
-    @State private var products = [Product]()
+    @Binding var cart: [Product]
+    @Binding var likedItems: [Product]
+    @Binding var itemCount: Int
     
+    @State private var products = [Product]()
     @State private var searchText = ""
+    
     var filteredProducts: [Product] {
         if searchText.isEmpty{
             products
@@ -57,32 +61,34 @@ struct ProductView: View {
                                     ProgressView()
                                 }
                             }
-                            .frame(width: 160, height: 160)
+                            .frame(width: 140, height: 140)
                             VStack(alignment: .leading) {
                                 Text(item.title)
                                     .lineLimit(1)
                                 Text(item.price, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                                Text(item.tags[0])
+                                    .bold()
+                                Text(item.tags[0].capitalized)
+                                    .font(.subheadline)
                                 HStack {
                                     Spacer()
                                     Button{
-                                        
+                                        addToCart(product: item)
                                     } label: {
                                         Text("Add to Cart")
                                     }
                                     .buttonStyle(AddCartButtonStyle())
                                     Spacer()
                                     Button{
-                                        
+                                        addToLikedItems(product: item)
                                     } label: {
                                         Image(systemName: "heart")
-                                            .background(.gray)
                                     }
+                                    .buttonStyle(AddFavoriteButtonStyle())
                                     Spacer()
                                     
                                 }
                             }
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.white)
                             .frame(alignment: .leading)
                             
                             Spacer()
@@ -92,7 +98,10 @@ struct ProductView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .searchable(text: $searchText, prompt: "What are you looking for?")
+                .ignoresSafeArea()
             }
+            .background(.darkBackground)
+            .navBarTitleColor(.white)
         }
         .task {
             await loadData()
@@ -115,8 +124,17 @@ struct ProductView: View {
             print("Invalid data")
         }
     }
+    
+    private func addToCart(product: Product) {
+        cart.append(product)
+        itemCount += 1
+    }
+    private func addToLikedItems(product: Product) {
+        likedItems.append(product)
+    }
 }
 
 #Preview {
-    ProductView()
+    @State var itemCount: Int = 0
+    return ProductView(cart: .constant([]), likedItems: .constant([]), itemCount: $itemCount)
 }
