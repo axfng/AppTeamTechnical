@@ -25,7 +25,7 @@ struct ContentView: View {
                     .tabItem {
                         Label("My Items", systemImage: "heart")
                     }
-                CartView(cart: $cart)
+                CartView(cart: $cart, itemCount: $itemCount)
                     .tabItem {
                         Label("Cart", systemImage: "cart")
                             .cartBadge(itemCount: itemCount)
@@ -35,9 +35,7 @@ struct ContentView: View {
             .toolbarBackground((colorScheme == .dark) ? .darkBackground : .lightBackground, for: .tabBar)
             .toolbarColorScheme((colorScheme == .dark) ? .dark : .light, for: .tabBar)
         }
-        .background(
-            (colorScheme == .dark) ? .darkBackground : .lightBackground
-        )
+        .adaptiveBackground()
     }
 }
 

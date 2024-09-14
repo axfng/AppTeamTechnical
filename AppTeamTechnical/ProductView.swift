@@ -94,7 +94,7 @@ struct ProductView: View {
                                     
                                 }
                             }
-                            .foregroundStyle(colorScheme == .dark ? .white : .black)
+                            .adaptiveForeground()
                             .frame(alignment: .leading)
                             
                             Spacer()
@@ -107,7 +107,7 @@ struct ProductView: View {
                 .searchBarCustom()
                 .ignoresSafeArea()
             }
-            .background(colorScheme == .dark ? .darkBackground : .lightBackground)
+            .adaptiveBackground()
             .navBarColor(.white)
         }
         .task {

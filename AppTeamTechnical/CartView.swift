@@ -11,6 +11,7 @@ struct CartView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @Binding var cart: [Product]
+    @Binding var itemCount: Int
     
     let item = Product(
             id: 1,
@@ -26,36 +27,46 @@ struct CartView: View {
     var body: some View {
         NavigationStack {
             VStack{
-                ScrollView {
-                    ForEach(cart, id:\.id) { item in
-                        NavigationLink{
-                            ItemView(product: item)
-                        } label: {
-                            HStack {
-                                AsyncImage(url: URL(string: item.images[0])) { phase in
-                                    if let image = phase.image {
-                                        image
-                                            .resizable()
-                                            .scaledToFit()
-                                    } else if phase.error != nil {
-                                        Text("There was an error loading the image")
-                                    } else {
-                                        ProgressView()
+                if itemCount == 0 {
+                    HStack {
+                        Text("Your cart is empty!")
+                            .font(.title3)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                            .adaptiveForeground()
+                    }
+                } else {
+                    ScrollView {
+                        ForEach(cart, id:\.id) { item in
+                            NavigationLink{
+                                ItemView(product: item)
+                            } label: {
+                                HStack {
+                                    AsyncImage(url: URL(string: item.images[0])) { phase in
+                                        if let image = phase.image {
+                                            image
+                                                .resizable()
+                                                .scaledToFit()
+                                        } else if phase.error != nil {
+                                            Text("There was an error loading the image")
+                                        } else {
+                                            ProgressView()
+                                        }
                                     }
+                                    .frame(width: 40, height: 40)
+                                    Text(item.title)
+                                        .lineLimit(1)
+                                    Spacer()
+                                    Text(item.price, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                                        .bold()
+                                        .padding(.leading, 60)
                                 }
-                                .frame(width: 40, height: 40)
-                                Text(item.title)
-                                    .lineLimit(1)
-                                Spacer()
-                                Text(item.price, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                                    .bold()
-                                    .padding(.leading, 60)
+                                .adaptiveBackground()
+                                .adaptiveForeground()
+                                .buttonStyle(pressProductStyle())
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.horizontal, 10)
-                            .background(colorScheme == .dark ? .darkBackground : .lightBackground)
-                            .foregroundStyle(colorScheme == .dark ? .white : .black)
-                            .buttonStyle(pressProductStyle())
                         }
                     }
                 }
@@ -77,7 +88,7 @@ struct CartView: View {
                 //                        }
                 //                        .padding(10)
                 //                        .background(.gray)
-                //                        .foregroundStyle(.white)
+                //                        .adaptiveForeground()
                 //                        .clipShape(.rect(cornerRadius: 6))
                 //
                 //                    }
@@ -92,17 +103,11 @@ struct CartView: View {
                     }
                     .buttonStyle(AddCartButtonStyle())
                 }
-                
             }
-            .background(colorScheme == .dark ? .darkBackground : .lightBackground)
-            .navigationTitle("Cart")
-            .navBarColor(.white)
-            
-            
+            .adaptiveBackground()
+            .navigationTitle("Cart (\(itemCount))")
+            .navBarColor(colorScheme == .dark ? .white : .black)
         }
-        
-        
-        
     }
     
     func getTotalCost() -> Double {
@@ -122,5 +127,6 @@ struct CartView: View {
 }
 
 #Preview {
-    CartView(cart: .constant([]))
+    @State var itemCount: Int = 0
+    return CartView(cart: .constant([]), itemCount: $itemCount)
 }

@@ -96,19 +96,21 @@ struct CartBadgeModifier: ViewModifier {
     }
 }
 
-struct waterMark: ViewModifier {
-    var text: String
+struct AdaptiveTextModifier: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
+
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(colorScheme == .dark ? .white : .black)
+    }
+}
+
+struct AdaptiveBackgroundModifier: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
     
     func body(content: Content) -> some View {
-        ZStack(alignment: .bottomTrailing) {
-            content
-            
-            Text(text)
-                .font(.caption)
-                .foregroundStyle(.white)
-                .padding()
-                .background(.black)
-        }
+        content
+            .background((colorScheme == .dark) ? .darkBackground : .lightBackground)
     }
 }
 
@@ -126,7 +128,6 @@ struct Styles: View {
                 .tabItem {
                     ZStack {
                         Label("", systemImage: "cart")
-                            .waterMarker(with: "hi")
                     }
                 }
         }
@@ -162,10 +163,13 @@ extension View {
         self.modifier(SearchBarStyleModifier())
     }
     func cartBadge(itemCount: Int) -> some View {
-            self.modifier(CartBadgeModifier(itemCount: itemCount))
+        self.modifier(CartBadgeModifier(itemCount: itemCount))
     }
-    func waterMarker(with text: String) -> some View {
-        modifier(waterMark(text: text))
+    func adaptiveForeground() -> some View {
+        self.modifier(AdaptiveTextModifier())
+    }
+    func adaptiveBackground() -> some View {
+        self.modifier(AdaptiveBackgroundModifier())
     }
 }
 
