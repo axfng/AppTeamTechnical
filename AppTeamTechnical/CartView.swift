@@ -13,7 +13,7 @@ struct CartView: View {
     @Binding var cart: [Product]
     @Binding var itemCount: Int
     
-    let item = Product(
+    let mockupItem = Product(
             id: 1,
             title: "Essence Mascara Labejhsd",
             description: "This is a description of the sample product.",
@@ -36,10 +36,10 @@ struct CartView: View {
                             .adaptiveForeground()
                     }
                 } else {
-                    ScrollView {
+                    List {
                         ForEach(cart, id:\.id) { item in
                             NavigationLink{
-                                ItemView(product: item)
+//                                ItemView(product: item)
                             } label: {
                                 HStack {
                                     AsyncImage(url: URL(string: item.images[0])) { phase in
@@ -67,33 +67,39 @@ struct CartView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.horizontal, 10)
+                            .swipeActions {
+                                Button(role: .destructive) {
+                                    removeItem(item: item)
+                                } label: {
+                                    Label("Delete", systemImage: "x")
+                                }
+                            }
                         }
                     }
                 }
                 Spacer()
-                //                    Button {
-                //
-                //                    } label: {
-                //                        VStack {
-                //                            HStack {
-                //                                Text(getTotalCost(), format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                //                                    .bold()
-                //                                Text("total")
-                //                                    .bold()
-                //                                Spacer()
-                //                                Image(systemName: "chevron.down")
-                //                            }
-                //                            Text("\(getTotalItems()) items")
-                //                                .font(.subheadline)
-                //                        }
-                //                        .padding(10)
-                //                        .background(.gray)
-                //                        .adaptiveForeground()
-                //                        .clipShape(.rect(cornerRadius: 6))
-                //
-                //                    }
-                //                    .padding()
-                //                    }
+                    Button {
+                    } label: {
+                        VStack {
+                            HStack {
+                                Text(getTotalCost(), format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                                    .bold()
+                                Text("total")
+                                    .bold()
+                                Spacer()
+                                Image(systemName: "chevron.down")
+                            }
+                            HStack {
+                                Text("\(getTotalItems()) items")
+                                Spacer()
+                            }                            
+                        }
+                        
+                    }
+                    .buttonStyle(TotalAmountStyle())
+                    .adaptiveForeground()
+                    .padding()
+                    }
                 VStack {
                     Button {
                         
@@ -108,8 +114,6 @@ struct CartView: View {
             .navigationTitle("Cart (\(itemCount))")
             .navBarColor(colorScheme == .dark ? .white : .black)
         }
-    }
-    
     func getTotalCost() -> Double {
         var total: Double = 0.0
         for product in cart {
@@ -124,9 +128,25 @@ struct CartView: View {
         }
         return total
     }
+    func removeItem(item: Product) {
+        if let index = cart.firstIndex(where: { $0.id == item.id }) {
+            cart.remove(at: index)
+        }
+    }
 }
-
 #Preview {
+    @State var cart: [Product] = [
+            Product(
+                id: 1,
+                title: "Essence Mascara",
+                description: "This is a description of the sample product.",
+                category: "Sample Category with a very long title",
+                price: 9.99,
+                images: ["https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/1.png"],
+                tags: ["SampleTag"],
+                isLiked: true
+            )
+        ]
     @State var itemCount: Int = 0
-    return CartView(cart: .constant([]), itemCount: $itemCount)
+    return CartView(cart: $cart, itemCount: $itemCount)
 }

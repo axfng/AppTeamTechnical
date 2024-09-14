@@ -71,6 +71,8 @@
 				ABD7B8BE2C95A9F500D0E210 /* Style */,
 				AB1111362C94F6F400B39613 /* ProductView.swift */,
 				ABD7B8B82C95A5E100D0E210 /* ProductViewModel.swift */,
+				ABC93B0C2C952F0400AA5E0A /* Styles.swift */,
+				ABC93B0E2C95405F00AA5E0A /* Color-Theme.swift */,
 				ABD7B8BC2C95A71600D0E210 /* ProductModel.swift */,
 				ABC93B062C95268A00AA5E0A /* MyItemView.swift */,
 				ABC93B082C95269700AA5E0A /* CartView.swift */,
@@ -93,8 +95,6 @@
 		ABD7B8BE2C95A9F500D0E210 /* Style */ = {
 			isa = PBXGroup;
 			children = (
-				ABC93B0E2C95405F00AA5E0A /* Color-Theme.swift */,
-				ABC93B0C2C952F0400AA5E0A /* Styles.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";

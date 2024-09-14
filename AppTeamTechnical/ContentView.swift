@@ -22,7 +22,7 @@ struct ContentView: View {
                     .tabItem {
                         Label("Products", systemImage: "bag")
                     }
-                MyItemView(likedItems: $likedItems)
+                MyItemView(viewModel: viewModel, cart: $cart, likedItems: $likedItems, itemCount: $itemCount)
                     .tabItem {
                         Label("My Items", systemImage: "heart")
                     }

@@ -11,6 +11,7 @@ class ProductViewModel: ObservableObject {
     @Published var products: [Product] = []
     @Published var searchText: String = ""
     
+    
     var filteredProducts: [Product] {
         if searchText.isEmpty{
             products

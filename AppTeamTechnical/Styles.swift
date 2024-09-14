@@ -44,6 +44,23 @@ struct AddCartButtonStyle: ButtonStyle {
             .background(configuration.isPressed ? pressedColor : displayColor)
             .foregroundStyle(.white)
             .clipShape(.rect(cornerRadius: 25))
+            .scaleEffect(configuration.isPressed ? 1.05 : 1.0)
+            .animation(.spring(duration: 1, bounce: 0.7), value: configuration.isPressed)
+    }
+}
+
+struct TotalAmountStyle: ButtonStyle {
+    var displayColor: Color = Color(red: 211/255, green: 211/255, blue: 211/255)
+    var pressedColor: Color = Color(red: 28/255, green: 28/255, blue: 30/255)
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.subheadline)
+            .padding(10)
+            .background(configuration.isPressed ? pressedColor : displayColor)
+            .clipShape(.rect(cornerRadius: 6))
+            .scaleEffect(configuration.isPressed ? 1.05 : 1.0)
+            .animation(.spring(duration: 1, bounce: 0.7), value: configuration.isPressed)
     }
 }
 
@@ -63,6 +80,8 @@ struct AddLikeButtonStyle: ButtonStyle {
             .background(configuration.isPressed ? pressedColor : displayColor)
             .foregroundStyle(.white)
             .clipShape(.circle)
+            .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+            .animation(.spring(duration: 1, bounce: 0.7), value: configuration.isPressed)
     }
 }
 

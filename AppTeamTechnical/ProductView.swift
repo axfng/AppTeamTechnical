@@ -24,7 +24,7 @@ struct ProductView: View {
             ScrollView {
                 ForEach(viewModel.filteredProducts, id: \.id) {item in
                     NavigationLink {
-                        ItemView(product: item)
+//                        ItemView(product: item)
                     } label: {
                         HStack {
                             AsyncImage(url: URL(string: item.images[0])) { phase in
@@ -57,7 +57,7 @@ struct ProductView: View {
                                     Button{
                                         addToLikedItems(product: item)
                                     } label: {
-                                        heartFill(isLiked: item.isLiked)
+                                        fillHeart(isLiked: item.isLiked)
                                     }
                                     .buttonStyle(AddLikeButtonStyle(isDark: (colorScheme == .dark)))
                                     Spacer()
@@ -70,6 +70,7 @@ struct ProductView: View {
                             Spacer()
                         }
                     }
+                    .buttonStyle(PlainButtonStyle())
                     .frame(maxWidth: .infinity)
                 }
                 .frame(maxWidth: .infinity)
@@ -83,12 +84,12 @@ struct ProductView: View {
             await viewModel.loadData()
         }
     }
-    func addToCart(product: Product) {
+    private func addToCart(product: Product) {
         cart.append(product)
         itemCount += 1
     }
     
-    func addToLikedItems(product: Product) {
+    private func addToLikedItems(product: Product) {
         if let index = viewModel.products.firstIndex(where: { $0.id == product.id }) {
             viewModel.products[index].isLiked.toggle()  // Toggle the isLiked property locally
             
@@ -100,7 +101,7 @@ struct ProductView: View {
         }
     }
         
-    private func heartFill(isLiked: Bool) -> Image {
+    private func fillHeart(isLiked: Bool) -> Image {
         if isLiked {
             return Image(systemName: "heart.fill")
         } else {
