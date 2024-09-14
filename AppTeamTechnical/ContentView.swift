@@ -18,7 +18,7 @@ struct Product: Codable, Identifiable {
     var category: String
     var price: Double
     var images: [String]
-    var tags: [String] 
+    var tags: [String]
 }
 
 struct ContentView: View {
@@ -39,25 +39,57 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack{
-            List(filteredProducts, id: \.id) {item in
-                Text(item.title)
-                AsyncImage(url: URL(string: item.images[0])) { phase in
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                            .scaledToFit()
-                    } else if phase.error != nil {
-                        Text("There was an error loading the image")
-                    } else {
-                        ProgressView()
+            ScrollView {
+                ForEach(filteredProducts, id: \.id) {item in
+                    NavigationLink {
+                        ProductView()
+                    } label: {
+                        HStack {
+                            AsyncImage(url: URL(string: item.images[0])) { phase in
+                                if let image = phase.image {
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                } else if phase.error != nil {
+                                    Text("There was an error loading the image")
+                                } else {
+                                    ProgressView()
+                                }
+                            }
+                            .frame(width: 160, height: 160)
+                            VStack(alignment: .leading) {
+                                Text(item.title)
+                                Text(item.price, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                                Text(item.tags[0])
+                                HStack {
+                                    Button{
+                                        
+                                    } label: {
+                                        Text("Add to Cart")
+                                    }
+                                    Button{
+                                        
+                                    } label: {
+                                        Image(systemName: "heart")
+                                    }
+                                    
+                                }
+                            }
+                            .foregroundStyle(.black)
+                            .frame(alignment: .leading)
+                            .lineLimit(1)
+                            
+                            Spacer()
+                        }
                     }
+                    .frame(maxWidth: .infinity)
                 }
-                .frame(width: 200, height: 200)
+                .frame(maxWidth: .infinity)
+                .searchable(text: $searchText, prompt: "What are you looking for?")
             }
-            .task {
-                await loadData()
-            }
-            .searchable(text: $searchText, prompt: "What are you looking for?")
+        }
+        .task {
+            await loadData()
         }
     }
     
