@@ -17,8 +17,8 @@ struct CartView: View {
             category: "Sample Category with a very long title",
             price: 9.99,
             images: ["https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/1.png"],
-            tags: ["SampleTag"]
-//            isLiked: true
+            tags: ["SampleTag"],
+            isLiked: true
         )
     
     var body: some View {

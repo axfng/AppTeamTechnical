@@ -20,6 +20,11 @@ struct Product: Codable, Identifiable {
     var price: Double
     var images: [String]
     var tags: [String]
+    var isLiked: Bool = false
+    
+    enum CodingKeys: String, CodingKey {
+            case id, title, description, category, price, images, tags
+        }
 }
 
 struct ProductView: View {
@@ -80,7 +85,7 @@ struct ProductView: View {
                                     Button{
                                         addToLikedItems(product: item)
                                     } label: {
-                                        Image(systemName: "heart")
+                                        heartFill(isLiked: item.isLiked)
                                     }
                                     .buttonStyle(AddLikeButtonStyle())
                                     Spacer()
@@ -129,7 +134,24 @@ struct ProductView: View {
         itemCount += 1
     }
     private func addToLikedItems(product: Product) {
-        likedItems.append(product)
+        // Find the index of the product in the products array
+        if let index = products.firstIndex(where: { $0.id == product.id }) {
+            products[index].isLiked.toggle()  // Toggle the isLiked property
+
+            // Update likedItems array
+            if products[index].isLiked {
+                likedItems.append(products[index])
+            } else {
+                likedItems.removeAll(where: { $0.id == product.id })
+            }
+        }
+    }
+    private func heartFill(isLiked: Bool) -> Image {
+        if isLiked {
+            return Image(systemName: "heart.fill")
+        } else {
+            return Image(systemName: "heart")
+        }
     }
 }
 
