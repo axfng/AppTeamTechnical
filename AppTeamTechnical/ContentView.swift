@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
+    @StateObject var viewModel = ProductViewModel()
     
     @State private var cart: [Product] = []
     @State private var likedItems: [Product] = []
@@ -17,7 +18,7 @@ struct ContentView: View {
     var body: some View {
         TabView{
             Group {
-                ProductView(cart: $cart, likedItems: $likedItems, itemCount: $itemCount)
+                ProductView(viewModel: viewModel, cart: $cart, likedItems: $likedItems, itemCount: $itemCount)
                     .tabItem {
                         Label("Products", systemImage: "bag")
                     }
