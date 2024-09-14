@@ -10,14 +10,15 @@ import SwiftUI
 struct CartView: View {
     @Binding var cart: [Product]
     
-    let mockProduct = Product(
+    var mockProduct = Product(
             id: 1,
             title: "Essence Mascara Labejhsd",
             description: "This is a description of the sample product.",
             category: "Sample Category with a very long title",
             price: 9.99,
             images: ["https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/1.png"],
-            tags: ["SampleTag"]
+            tags: ["SampleTag"],
+            isLiked: true
         )
     
     var body: some View {
@@ -27,7 +28,7 @@ struct CartView: View {
                     ForEach(cart, id:\.id) { item in
                         HStack {
                             AsyncImage(url: URL(string: item.images[0])) { phase in
-                                if let image = phase.image {
+                                if var image = phase.image {
                                     image
                                         .resizable()
                                         .scaledToFit()

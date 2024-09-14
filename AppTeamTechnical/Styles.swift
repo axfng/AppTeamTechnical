@@ -34,7 +34,7 @@ struct AddCartButtonStyle: ButtonStyle {
     }
 }
 
-struct AddFavoriteButtonStyle: ButtonStyle {
+struct AddLikeButtonStyle: ButtonStyle {
     var displayColor: Color = Color(red: 58/255, green: 58/255, blue: 60/255)
     var pressedColor: Color = Color(red: 44/255, green: 44/255, blue: 45/255)
 
@@ -47,8 +47,60 @@ struct AddFavoriteButtonStyle: ButtonStyle {
     }
 }
 
+struct CartBadgeModifier: ViewModifier {
+    var itemCount: Int
+
+    func body(content: Content) -> some View {
+        ZStack {
+            content
+            
+            if itemCount > 0 {
+                Text("\(itemCount)")
+                    .font(.caption2)
+                    .foregroundColor(.white)
+                    .padding(6)
+                    .background(Color.orange)
+                    .clipShape(Circle())
+//                    .offset(x: 10, y: -10)  // Position the badge in the top-right corner
+            }
+        }
+    }
+}
+
+struct waterMark: ViewModifier {
+    var text: String
+    
+    func body(content: Content) -> some View {
+        ZStack(alignment: .bottomTrailing) {
+            content
+            
+            Text(text)
+                .font(.caption)
+                .foregroundStyle(.white)
+                .padding()
+                .background(.black)
+        }
+    }
+}
+
 struct Styles: View {
+    @State var itemCount = 2
     var body: some View {
+            VStack {
+                Button("Add Item") {
+                    itemCount += 1
+                }
+                Text("Cart Items: \(itemCount)")
+            }
+        TabView{
+            Styles()
+                .tabItem {
+                    ZStack {
+                        Label("", systemImage: "cart")
+                            .waterMarker(with: "hi")
+                    }
+                }
+        }
         NavigationStack {
             ZStack {
                 Color(red: 28/255, green: 28/255, blue: 30/255)
@@ -60,10 +112,11 @@ struct Styles: View {
                     .buttonStyle(AddCartButtonStyle())
                     Button{
                     } label: {
-                        Image(systemName: "heart")
+                        Image(systemName: "heart.fill")
                     }
-                    .buttonStyle(AddFavoriteButtonStyle())
+                    .buttonStyle(AddLikeButtonStyle())
                 }
+                
             }
             .navigationTitle("Title Color")
             .navBarTitleColor(.white)
@@ -75,6 +128,12 @@ struct Styles: View {
 extension View {
     func navBarTitleColor(_ color: UIColor) -> some View {
         self.modifier(NavBarTitleColorModifier(titleColor: color))
+    }
+    func cartBadge(itemCount: Int) -> some View {
+            self.modifier(CartBadgeModifier(itemCount: itemCount))
+    }
+    func waterMarker(with text: String) -> some View {
+        modifier(waterMark(text: text))
     }
 }
 

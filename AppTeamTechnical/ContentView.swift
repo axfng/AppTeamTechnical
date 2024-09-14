@@ -26,6 +26,7 @@ struct ContentView: View {
                 CartView(cart: $cart)
                     .tabItem {
                         Label("Cart", systemImage: "cart")
+                            .cartBadge(itemCount: itemCount)
                     }
             }
         }
