@@ -24,8 +24,8 @@ struct ItemView: View {
             category: "Sample Category",
             price: 19.99,
             images: ["https://dummyimage.com/200x200"],
-            tags: ["SampleTag"],
-            isLiked: true
+            tags: ["SampleTag"]
+//            isLiked: true
         )
     return ItemView(product: mockProduct)
 }

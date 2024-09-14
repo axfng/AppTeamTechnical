@@ -26,7 +26,7 @@ struct AddCartButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.subheadline)
-            .padding(.horizontal, 40)
+            .padding(.horizontal, 45)
             .padding(.vertical, 10)
             .background(configuration.isPressed ? pressedColor : displayColor)
             .foregroundStyle(.white)

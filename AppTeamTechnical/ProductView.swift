@@ -20,7 +20,6 @@ struct Product: Codable, Identifiable {
     var price: Double
     var images: [String]
     var tags: [String]
-    var isLiked: Bool = false
 }
 
 struct ProductView: View {
@@ -52,7 +51,7 @@ struct ProductView: View {
                     } label: {
                         HStack {
                             AsyncImage(url: URL(string: item.images[0])) { phase in
-                                if var image = phase.image {
+                                if let image = phase.image {
                                     image
                                         .resizable()
                                         .scaledToFit()
@@ -71,7 +70,6 @@ struct ProductView: View {
                                 Text(item.tags[0].capitalized)
                                     .font(.subheadline)
                                 HStack {
-                                    Spacer()
                                     Button{
                                         addToCart(product: item)
                                     } label: {
@@ -80,7 +78,6 @@ struct ProductView: View {
                                     .buttonStyle(AddCartButtonStyle())
                                     Spacer()
                                     Button{
-//                                        item.isLiked.toggle()
                                         addToLikedItems(product: item)
                                     } label: {
                                         Image(systemName: "heart")
@@ -112,14 +109,14 @@ struct ProductView: View {
     }
     
     func loadData() async {
-        guard var url = URL(string: "https://dummyjson.com/products") else{
+        guard let url = URL(string: "https://dummyjson.com/products") else{
             print("Invalid URL")
             return
         }
         
         do {
-            var (data, _) = try await URLSession.shared.data(from: url)
-            if var decodedResponse = try? JSONDecoder().decode(Products.self, from: data) {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            if let decodedResponse = try? JSONDecoder().decode(Products.self, from: data) {
                 products = decodedResponse.products
             }
         } catch {
@@ -131,7 +128,7 @@ struct ProductView: View {
         cart.append(product)
         itemCount += 1
     }
-    private func addToLikedItems(product: Product) {        
+    private func addToLikedItems(product: Product) {
         likedItems.append(product)
     }
 }

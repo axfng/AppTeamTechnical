@@ -10,15 +10,15 @@ import SwiftUI
 struct CartView: View {
     @Binding var cart: [Product]
     
-    var mockProduct = Product(
+    let mockProduct = Product(
             id: 1,
             title: "Essence Mascara Labejhsd",
             description: "This is a description of the sample product.",
             category: "Sample Category with a very long title",
             price: 9.99,
             images: ["https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/1.png"],
-            tags: ["SampleTag"],
-            isLiked: true
+            tags: ["SampleTag"]
+//            isLiked: true
         )
     
     var body: some View {
@@ -28,7 +28,7 @@ struct CartView: View {
                     ForEach(cart, id:\.id) { item in
                         HStack {
                             AsyncImage(url: URL(string: item.images[0])) { phase in
-                                if var image = phase.image {
+                                if let image = phase.image {
                                     image
                                         .resizable()
                                         .scaledToFit()
@@ -78,13 +78,13 @@ struct CartView: View {
                         
                     } label: {
                         Text("Check Out")
-                            .padding(.horizontal, 100)
+                            .padding(.horizontal, 80)
                     }
                     .buttonStyle(AddCartButtonStyle())
                 }
                 
             }
-            .padding(20) //needs to be fixed
+            .padding(35) //needs to be fixed
             .navigationTitle("Cart")
             .navBarTitleColor(.white)
             .background(.darkBackground)
