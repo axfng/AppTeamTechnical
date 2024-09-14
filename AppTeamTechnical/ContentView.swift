@@ -13,8 +13,8 @@ struct ContentView: View {
     @State private var itemCount: Int = 0
     
     var body: some View {
-        ZStack{
-            TabView{
+        TabView{
+            Group {
                 ProductView(cart: $cart, likedItems: $likedItems, itemCount: $itemCount)
                     .tabItem {
                         Label("Products", systemImage: "bag")
@@ -29,8 +29,10 @@ struct ContentView: View {
                             .cartBadge(itemCount: itemCount)
                     }
             }
+            .toolbarBackground(.darkBackground, for: .tabBar)
+            .toolbarBackground(.visible, for: .tabBar)
+            .toolbarColorScheme(.dark, for: .tabBar)
         }
-        .background(.darkBackground)
     }
 }
 
