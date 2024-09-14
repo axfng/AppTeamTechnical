@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct CartView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @Binding var cart: [Product]
     
-    let mockProduct = Product(
+    let item = Product(
             id: 1,
             title: "Essence Mascara Labejhsd",
             description: "This is a description of the sample product.",
@@ -26,27 +28,35 @@ struct CartView: View {
             VStack{
                 ScrollView {
                     ForEach(cart, id:\.id) { item in
-                        HStack {
-                            AsyncImage(url: URL(string: item.images[0])) { phase in
-                                if let image = phase.image {
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                } else if phase.error != nil {
-                                    Text("There was an error loading the image")
-                                } else {
-                                    ProgressView()
+                        NavigationLink{
+                            ItemView(product: item)
+                        } label: {
+                            HStack {
+                                AsyncImage(url: URL(string: item.images[0])) { phase in
+                                    if let image = phase.image {
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                    } else if phase.error != nil {
+                                        Text("There was an error loading the image")
+                                    } else {
+                                        ProgressView()
+                                    }
                                 }
+                                .frame(width: 40, height: 40)
+                                Text(item.title)
+                                    .lineLimit(1)
+                                Spacer()
+                                Text(item.price, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                                    .bold()
+                                    .padding(.leading, 60)
                             }
-                            .frame(width: 40, height: 40)
-                            Text(item.title)
-                                .lineLimit(1)
-                            Spacer()
-                            Text(item.price, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                                .bold()
-                                .padding(.leading, 75)
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 10)
+                            .background(colorScheme == .dark ? .darkBackground : .lightBackground)
+                            .foregroundStyle(colorScheme == .dark ? .white : .black)
+                            .buttonStyle(pressProductStyle())
                         }
-                        .foregroundStyle(.white)
                     }
                 }
                 Spacer()
@@ -84,11 +94,13 @@ struct CartView: View {
                 }
                 
             }
-            .padding(35) //needs to be fixed
+            .background(colorScheme == .dark ? .darkBackground : .lightBackground)
             .navigationTitle("Cart")
             .navBarColor(.white)
-            .background(.darkBackground)
+            
+            
         }
+        
         
         
     }

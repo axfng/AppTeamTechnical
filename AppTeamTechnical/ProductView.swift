@@ -28,6 +28,8 @@ struct Product: Codable, Identifiable {
 }
 
 struct ProductView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @Binding var cart: [Product]
     @Binding var likedItems: [Product]
     @Binding var itemCount: Int
@@ -87,12 +89,12 @@ struct ProductView: View {
                                     } label: {
                                         heartFill(isLiked: item.isLiked)
                                     }
-                                    .buttonStyle(AddLikeButtonStyle())
+                                    .buttonStyle(AddLikeButtonStyle(isDark: (colorScheme == .dark)))
                                     Spacer()
                                     
                                 }
                             }
-                            .foregroundStyle(.white)
+                            .foregroundStyle(colorScheme == .dark ? .white : .black)
                             .frame(alignment: .leading)
                             
                             Spacer()
@@ -105,7 +107,7 @@ struct ProductView: View {
                 .searchBarCustom()
                 .ignoresSafeArea()
             }
-            .background(.darkBackground)
+            .background(colorScheme == .dark ? .darkBackground : .lightBackground)
             .navBarColor(.white)
         }
         .task {

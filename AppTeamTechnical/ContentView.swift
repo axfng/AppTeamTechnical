@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @State private var cart: [Product] = []
     @State private var likedItems: [Product] = []
     @State private var itemCount: Int = 0
@@ -29,10 +31,13 @@ struct ContentView: View {
                             .cartBadge(itemCount: itemCount)
                     }
             }
-            .toolbarBackground(.darkBackground, for: .tabBar)
-            .toolbarBackground(.visible, for: .tabBar)
-            .toolbarColorScheme(.dark, for: .tabBar)
+            .toolbarBackground(Color("ItemBackground"), for: .tabBar)
+            .toolbarBackground((colorScheme == .dark) ? .darkBackground : .lightBackground, for: .tabBar)
+            .toolbarColorScheme((colorScheme == .dark) ? .dark : .light, for: .tabBar)
         }
+        .background(
+            (colorScheme == .dark) ? .darkBackground : .lightBackground
+        )
     }
 }
 

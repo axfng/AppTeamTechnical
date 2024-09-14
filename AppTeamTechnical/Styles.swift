@@ -48,15 +48,31 @@ struct AddCartButtonStyle: ButtonStyle {
 }
 
 struct AddLikeButtonStyle: ButtonStyle {
-    var displayColor: Color = Color(red: 58/255, green: 58/255, blue: 60/255)
-    var pressedColor: Color = Color(red: 44/255, green: 44/255, blue: 45/255)
-
+    var isDark: Bool
+    
+    var displayColor: Color {
+        return isDark ? Color(red: 58/255, green: 58/255, blue: 60/255) : Color(.lightGray)
+    }
+    var pressedColor: Color {
+        return isDark ? Color(red: 44/255, green: 44/255, blue: 45/255) : Color(.gray)
+    }
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding(10)
             .background(configuration.isPressed ? pressedColor : displayColor)
             .foregroundStyle(.white)
             .clipShape(.circle)
+    }
+}
+
+struct pressProductStyle: ButtonStyle {
+    var displayColor: Color = Color(red: 58/255, green: 58/255, blue: 60/255)
+    var pressedColor: Color = Color(red: 44/255, green: 44/255, blue: 45/255)
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background(configuration.isPressed ? pressedColor : displayColor)
     }
 }
 
@@ -127,7 +143,7 @@ struct Styles: View {
                     } label: {
                         Image(systemName: "heart.fill")
                     }
-                    .buttonStyle(AddLikeButtonStyle())
+                    .buttonStyle(AddLikeButtonStyle(isDark: false))
                 }
                 
             }
