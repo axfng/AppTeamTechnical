@@ -102,10 +102,11 @@ struct ProductView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .searchable(text: $searchText, prompt: "What are you looking for?")
+                .searchBarCustom()
                 .ignoresSafeArea()
             }
             .background(.darkBackground)
-            .navBarTitleColor(.white)
+            .navBarColor(.white)
         }
         .task {
             await loadData()

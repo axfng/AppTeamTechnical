@@ -86,7 +86,7 @@ struct CartView: View {
             }
             .padding(35) //needs to be fixed
             .navigationTitle("Cart")
-            .navBarTitleColor(.white)
+            .navBarColor(.white)
             .background(.darkBackground)
         }
         

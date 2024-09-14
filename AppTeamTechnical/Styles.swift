@@ -19,6 +19,19 @@ struct NavBarTitleColorModifier: ViewModifier {
     }
 }
 
+struct SearchBarStyleModifier: ViewModifier {
+    init() {
+        // Customize the UISearchBar appearance globally
+        let searchBarAppearance = UISearchBar.appearance()
+        searchBarAppearance.searchTextField.textColor = UIColor.white  // Set text color to white
+        searchBarAppearance.searchTextField.backgroundColor = UIColor.darkGray // Optional: Set background color of search bar
+    }
+
+    func body(content: Content) -> some View {
+        content
+    }
+}
+
 struct AddCartButtonStyle: ButtonStyle {
     var displayColor: Color = Color(.blue)
     var pressedColor: Color = Color(red: 9/255, green: 99/255, blue: 191/255)
@@ -26,7 +39,7 @@ struct AddCartButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.subheadline)
-            .padding(.horizontal, 45)
+            .padding(.horizontal, 50)
             .padding(.vertical, 10)
             .background(configuration.isPressed ? pressedColor : displayColor)
             .foregroundStyle(.white)
@@ -119,15 +132,18 @@ struct Styles: View {
                 
             }
             .navigationTitle("Title Color")
-            .navBarTitleColor(.white)
+            .navBarColor(.white)
             .ignoresSafeArea()
         }
     }
 }
 
 extension View {
-    func navBarTitleColor(_ color: UIColor) -> some View {
+    func navBarColor(_ color: UIColor) -> some View {
         self.modifier(NavBarTitleColorModifier(titleColor: color))
+    }
+    func searchBarCustom() -> some View {
+        self.modifier(SearchBarStyleModifier())
     }
     func cartBadge(itemCount: Int) -> some View {
             self.modifier(CartBadgeModifier(itemCount: itemCount))
