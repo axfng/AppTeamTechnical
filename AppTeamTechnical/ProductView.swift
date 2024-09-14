@@ -73,7 +73,7 @@ struct ProductView: View {
                     .frame(maxWidth: .infinity)
                 }
                 .frame(maxWidth: .infinity)
-                .searchable(text: $searchText, prompt: "What are you looking for?")
+                .searchable(text: $viewModel.searchText, prompt: "What are you looking for?")
                 .searchBarCustom()
                 .ignoresSafeArea()
             }

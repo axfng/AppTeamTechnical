@@ -12,11 +12,11 @@ class ProductViewModel: ObservableObject {
     @Published var searchText: String = ""
     
     var filteredProducts: [Product] {
-        if searchText.isEmpty {
-            return products
+        if searchText.isEmpty{
+            products
         } else {
-            return products.filter { product in
-                product.tags.contains { tag in
+            products.filter { products in
+                products.tags.contains { tag in
                     tag.localizedStandardContains(searchText)
                 }
             }
